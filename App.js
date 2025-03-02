@@ -109,6 +109,32 @@ const App = () => {
     Roboto_400Regular: Fonts.Roboto_400Regular,
     Roboto_500Medium: Fonts.Roboto_500Medium,
   });
+    const [isLoading, setIsLoading] = useState(true);
+    const [userToken, setUserToken] = useState(null);
+  
+    React.useEffect(() => {
+      const checkToken = async () => {
+        const token = await AsyncStorage.getItem('access_token');
+        setUserToken(token);
+        if (token) {
+          try {
+            navigation.navigate('BottomTabNavigator', {
+              screen: 'ChecklistPageScreen',
+              token: token,
+            });
+          } catch (err) {
+            console.error(err);
+            try {
+              navigation.navigate('ChecklistPageScreen');
+            } catch (error) {
+              console.error(error);
+            }
+          }
+        } 
+      };
+
+        checkToken();
+        }, [navigation]);
 
   React.useEffect(() => {
     async function prepare() {
